@@ -1912,16 +1912,16 @@ def check_answer(message, task_number, wrong_word):
     normalized_correct = normalize_text(correct_word)
 
     if normalized_user == normalized_correct:
-        bot.send_message(message.chat.id, f"Правильно! Слово: {correct_word}")
+        bot.send_message(message.chat.id, f"✅Правильно! Слово: {correct_word}")
     else:
         if expected_letter and len(user_answer) == 1 and user_answer.lower() == expected_letter.lower():
-            bot.send_message(message.chat.id, f"Правильно! Слово: {correct_word}")
+            bot.send_message(message.chat.id, f"✅Правильно! Слово: {correct_word}")
         else:
             if expected_letter:
                 bot.send_message(message.chat.id,
-                                 f"Неправильно! Правильная буква: {expected_letter}, слово: {correct_word}.")
+                                 f"❌Неправильно! Правильная буква: {expected_letter}, слово: {correct_word}.")
             else:
-                bot.send_message(message.chat.id, f"Неправильно! Правильное слово: {correct_word}.")
+                bot.send_message(message.chat.id, f"❌Неправильно! Правильное слово: {correct_word}.")
 
     send_task(message, task_number)
 
