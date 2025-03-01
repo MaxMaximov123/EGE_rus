@@ -3,7 +3,7 @@ from telebot import types
 import random
 import re
 
-TOKEN = '7681546401:AAFNA_yyl_nrFDHwQLzhTeN_UgP6Vk-pNgA'
+TOKEN = '7572421598:AAGrs8X7bJdEwdTEg1nrbmMK-pceKFsSWiE'
 bot = telebot.TeleBot(TOKEN)
 
 
@@ -900,7 +900,7 @@ tasks_dict = {
         "раз...гранный": "разыгранный",
         "пред...нфарктный": "предынфарктный",
         "под...скать": "подыскать",
-        "сверх...зысканный об...грать": "сверхизысканный",
+        "сверх...зысканный": "сверхизысканный",
         "транс...ранский": "трансиранский",
         "трёх...мпульсный": "трёхимпульсный",
         "без...мянный": "безымянный",
@@ -1491,7 +1491,7 @@ tasks_dict = {
         "жмур….ться": "жмуриться",
         "став….ть": "ставить",
         "теш….ть": "тешить",
-        "морщ….ться": "морщиться",
+        "морщ...ться": "морщиться",
         "всклокоч….ть": "всклокочить",
         "мысл….ть": "мыслить",
         "лицемер….ть": "лицемерить",
@@ -1912,16 +1912,16 @@ def check_answer(message, task_number, wrong_word):
     normalized_correct = normalize_text(correct_word)
 
     if normalized_user == normalized_correct:
-        bot.send_message(message.chat.id, f"✅Правильно! Слово: {correct_word}")
+        bot.send_message(message.chat.id, f"Правильно! Слово: {correct_word}")
     else:
         if expected_letter and len(user_answer) == 1 and user_answer.lower() == expected_letter.lower():
-            bot.send_message(message.chat.id, f"✅Правильно! Слово: {correct_word}")
+            bot.send_message(message.chat.id, f"Правильно! Слово: {correct_word}")
         else:
             if expected_letter:
                 bot.send_message(message.chat.id,
-                                 f"❌Неправильно! Правильная буква: {expected_letter}, слово: {correct_word}.")
+                                 f"Неправильно! Правильная буква: {expected_letter}, слово: {correct_word}.")
             else:
-                bot.send_message(message.chat.id, f"❌Неправильно! Правильное слово: {correct_word}.")
+                bot.send_message(message.chat.id, f"Неправильно! Правильное слово: {correct_word}.")
 
     send_task(message, task_number)
 
