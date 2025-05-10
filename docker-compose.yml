@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   app:
+    restart: always
     build: .
     container_name: my_python_app
     volumes:
