@@ -8,7 +8,6 @@ TOKEN = '7572421598:AAGrs8X7bJdEwdTEg1nrbmMK-pceKFsSWiE'
 bot = telebot.TeleBot(TOKEN)
 
 
-# Индивидуальные сессии пользователей
 user_cache = {}
 
 
