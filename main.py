@@ -43,24 +43,43 @@ def select_task(message):
         bot.send_message(user_id, "Такого задания нет.")
         return
 
-    words_pool = list(tasks_dict[task_number].keys())
-    random.shuffle(words_pool)
+    existing_data = user_cache.get(user_id)
+    if existing_data and existing_data.get("task") == task_number:
+        if existing_data["pool"]:
+            bot.send_message(user_id, f"Вы продолжаете задание {task_number}")
+        else:
+            # Задание пройдено, начинаем заново
+            words_pool = list(tasks_dict[task_number].keys())
+            random.shuffle(words_pool)
+            user_cache[user_id] = {
+                "task": task_number,
+                "pool": words_pool,
+                "correct": 0,
+                "incorrect": 0,
+                "errors": [],
+                "mode": "full",
+                "total": len(words_pool),
+                "current_index": 0
+            }
+            bot.send_message(user_id, f"Задание {task_number} начато заново.")
+    else:
+        words_pool = list(tasks_dict[task_number].keys())
+        random.shuffle(words_pool)
+        user_cache[user_id] = {
+            "task": task_number,
+            "pool": words_pool,
+            "correct": 0,
+            "incorrect": 0,
+            "errors": [],
+            "mode": "full",
+            "total": len(words_pool),
+            "current_index": 0
+        }
+        bot.send_message(user_id, f"Вы выбрали задание {task_number}")
 
-    user_cache[user_id] = {
-        "task": task_number,
-        "pool": words_pool,
-        "correct": 0,
-        "incorrect": 0,
-        "errors": [],
-        "mode": "full",  # full или errors
-        "total": len(words_pool),
-        "current_index": 0
-    }
-
-    # Отображаем клавиатуру только при запуске режима
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     markup.add(types.KeyboardButton("Получить результаты"), types.KeyboardButton("Назад"))
-    bot.send_message(user_id, f"Вы выбрали задание {task_number}", reply_markup=markup)
+    bot.send_message(user_id, "Начнем?", reply_markup=markup)
 
     send_next_question(message)
 
@@ -91,9 +110,9 @@ def send_next_question(message):
         # Для других заданий — без клавиатуры
         bot.send_message(user_id, question_text)
 
-@bot.message_handler(func=lambda m: m.text and m.text.lower() == "назад")
+@bot.message_handler(func=lambda m: m.text.lower() == "назад")
 def back_to_main_menu(message):
-    user_cache.pop(message.chat.id, None)
+    bot.send_message(message.chat.id, "Главное меню:", reply_markup=types.ReplyKeyboardRemove())
     main_menu(message)
 
 
