@@ -57,6 +57,11 @@ def select_task(message):
         "current_index": 0
     }
 
+    # Отображаем клавиатуру только при запуске режима
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    markup.add(types.KeyboardButton("Получить результаты"), types.KeyboardButton("Назад"))
+    bot.send_message(user_id, f"Вы выбрали задание {task_number}", reply_markup=markup)
+
     send_next_question(message)
 
 
@@ -72,15 +77,19 @@ def send_next_question(message):
     user_data['current'] = current_word
     user_data['current_index'] += 1
 
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    if user_data["task"] == "14":
-        markup.add(types.KeyboardButton("Слитно"), types.KeyboardButton("Раздельно"))
-    markup.add(types.KeyboardButton("Получить результаты"), types.KeyboardButton("Назад"))
-
     i = user_data['current_index']
     n = user_data['total']
-    bot.send_message(user_id, f"{i}/{n}. Как пишется: {current_word}?", reply_markup=markup)
+    question_text = f"{i}/{n}. Как пишется: {current_word}?"
 
+    if user_data["task"] == "14":
+        # Для задания 14 показываем кнопки каждый раз
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        markup.add(types.KeyboardButton("Слитно"), types.KeyboardButton("Раздельно"))
+        markup.add(types.KeyboardButton("Получить результаты"), types.KeyboardButton("Назад"))
+        bot.send_message(user_id, question_text, reply_markup=markup)
+    else:
+        # Для других заданий — без клавиатуры
+        bot.send_message(user_id, question_text)
 
 @bot.message_handler(func=lambda m: m.text and m.text.lower() == "назад")
 def back_to_main_menu(message):
